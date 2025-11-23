@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- File dibuat oleh: 147_JAJANG PA'IJ -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Media Pembelajaran Interaktif FPB & KPK</title>
+<style>
+  /* 147_JAJANG PA'IJ – Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(90deg, #2a601a 0%, #cacc0f 100%);
+    overflow-x: hidden;
+    user-select: none;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255 255 255 / 0.2) 2px, transparent 4px),
+      radial-gradient(circle at 35% 40%, rgba(255 255 255 / 0.2) 2px, transparent 4px),
+      radial-gradient(circle at 50% 20%, rgba(255 255 255 / 0.2) 2px, transparent 4px),
+      radial-gradient(circle at 70% 30%, rgba(255 255 255 / 0.2) 2px, transparent 4px),
+      radial-gradient(circle at 80% 75%, rgba(255 255 255 / 0.2) 2px, transparent 4px),
+      radial-gradient(circle at 40% 65%, rgba(255 255 255 / 0.2) 2px, transparent 4px);
+    background-repeat: no-repeat;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+      linear-gradient(to right, rgba(255 255 255 / 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255 255 255 / 0.1) 1px, transparent 1px);
+    background-size: 30% 40%;
+  }
+
+  /* Kartu utama aplikasi */
+  #app {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: rgba(255 255 255 / 0.96);
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.27);
+    min-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    text-align: center;
+    background: linear-gradient(135deg,#0f5c24,#4ea728);
+    padding: 24px 20px 26px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    color: #f6f9ee;
+  }
+  header h1 {
+    font-size: 24px;
+    margin:0 0 4px;
+    font-weight: 700;
+  }
+  header p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 15px;
+    color: #e3f6c9;
+  }
+
+  main {
+    flex-grow: 1;
+    padding: 20px 20px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  /* ==============================
+     ICON MENU
+  =============================== */
+  #options {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    width: 100%;
+  }
+  .option-btn {
+    background: linear-gradient(145deg, #d0f7a0, #8eba27);
+    border-radius: 22px;
+    box-shadow:  8px 8px 15px #67841f,
+                 -8px -8px 15px #c7ff67;
+    color: #244000;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 23px 10px 18px;
+    transition: all 0.3s ease;
+    user-select: none;
+    font-weight: 700;
+    font-size: 14px;
+    box-sizing: border-box;
+    height: 140px;
+    justify-content: center;
+    position: relative;
+    perspective: 600px;
+  }
+  .option-btn:hover {
+    background: linear-gradient(145deg, #bbe57d, #aadd39);
+    box-shadow: inset 4px 4px 14px #647917,
+                6px 6px 18px #5d8a19,
+               -6px -6px 18px #cffb5c;
+    color: #1a2c00;
+    transform: translateY(-6px) rotateX(6deg);
+  }
+  .option-btn:focus-visible {
+    outline: 3px solid #8adb2b;
+    outline-offset: 3px;
+  }
+  .option-btn svg {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 14px;
+    filter: drop-shadow(1px 1px 1px #55850488);
+    transition: transform 0.3s ease;
+  }
+  .option-btn:hover svg {
+    transform: scale(1.15) rotate(2deg);
+  }
+  .option-label {
+    user-select: none;
+  }
+
+  /* =============================
+     CONTENT SECTIONS
+  ============================= */
+  section.content-section {
+    display: none;
+    width: 100%;
+    max-height: 550px;
+    overflow-y: auto;
+    text-align: left;
+    padding: 20px 15px 40px 15px;
+    background: #f3fcce;
+    border-radius: 20px;
+    box-shadow: inset 0 2px 6px #d7e69f;
+    position: relative;
+  }
+  section.content-section.active {
+    display: block;
+  }
+  section.content-section h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #2c5700;
+    text-align: center;
+  }
+  section.content-section h3 {
+    margin-top: 20px;
+    color: #4a7a0a;
+    font-weight: 700;
+  }
+  section.content-section p,
+  section.content-section ol li,
+  section.content-section ul li {
+    font-size: 16px;
+    color: #3f5f00;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  section.content-section ol, section.content-section ul {
+    padding-left: 24px;
+  }
+  section.content-section ol li, section.content-section ul li {
+    margin-bottom: 14px;
+  }
+
+  /* BACK BUTTON */
+  .back-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 24px;
+    padding: 12px 20px;
+    background-color: #3e6d00;
+    border: none;
+    border-radius: 32px;
+    font-weight: 700;
+    color: #efffbb;
+    cursor: pointer;
+    box-shadow: 2px 4px 8px #5bb301cc;
+    transition: background-color 0.3s ease, transform 0.25s ease;
+    user-select: none;
+    z-index: 10;
+  }
+  .back-btn:hover {
+    background-color: #518900;
+    transform: scale(1.05);
+  }
+  .back-btn:focus-visible {
+    outline: 2px solid #aefe0e;
+    outline-offset: 4px;
+  }
+
+  /* =============================
+      MULAI BELAJAR : MEDIA AJAR INTERAKTIF
+  ============================= */
+  #mulaiPembelajaran .section-inner {
+    max-width: 100%;
+    user-select: none;
+  }
+
+  .learning-steps {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b6900;
+  }
+  .learning-steps span {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #e1f7b8;
+    opacity: 0.5;
+  }
+  .learning-steps span.active {
+    opacity: 1;
+    box-shadow: 0 0 0 2px #b9e96c;
+  }
+
+  .learning-slide {
+    display: none;
+    background: #fff9e5;
+    border-radius: 18px;
+    padding: 16px 14px 20px;
+    box-shadow: 0 3px 10px rgba(196, 176, 103, 0.35);
+  }
+  .learning-slide.active {
+    display: block;
+  }
+
+  #mulaiPembelajaran h3 {
+    margin-bottom: 14px;
+    font-size: 20px;
+    text-align: center;
+    color: #3b6900;
+  }
+  #mulaiPembelajaran p, 
+  #mulaiPembelajaran li {
+    color: #3c6400;
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+  #mulaiPembelajaran ul,
+  #mulaiPembelajaran ol {
+    padding-left: 22px;
+    margin-bottom: 20px;
+  }
+
+  .materi-hero {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .materi-hero-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #f6f0c2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .materi-hero-text {
+    font-size: 14px;
+    color: #4a7a0a;
+  }
+
+  .concept-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .concept-icon {
+    width: 22px;
+    margin-top: 2px;
+    font-size: 17px;
+  }
+  .concept-text strong {
+    display: inline;
+  }
+
+  .example-title {
+    font-size: 17px;
+    margin-bottom: 8px;
+    text-align: center;
+    color: #365804;
+  }
+  .example-card {
+    background: #f8f1cf;
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #e0cf96;
+  }
+  .example-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #365804;
+  }
+  .example-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f3e093;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .example-card p {
+    margin: 0 0 4px;
+    font-size: 14.5px;
+  }
+
+  .slide-primary-btn,
+  .slide-secondary-btn {
+    margin-top: 10px;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+    box-shadow: 0 5px 12px #36a205a3;
+    user-select: none;
+  }
+  .slide-primary-btn {
+    background: #4bbd11;
+    color: #fff;
+  }
+  .slide-primary-btn:hover {
+    background: #61d63f;
+  }
+  .slide-secondary-btn {
+    background: #f0facc;
+    color: #365804;
+    box-shadow: 0 3px 8px #a0c442aa;
+  }
+  .slide-secondary-btn:hover {
+    background: #d8f58f;
+  }
+
+  #mulaiPembelajaran .question {
+    margin-top: 10px;
+    background: #e4f7a1;
+    padding: 18px 15px 22px 15px;
+    border-radius: 16px;
+    box-shadow: inset 1px 1px 5px #c1e066;
+  }
+  #mulaiPembelajaran .question h4 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  #mulaiPembelajaran .choices {
+    margin-top: 14px;
+    display: grid;
+    gap: 12px;
+  }
+  .choice-btn {
+    background: #f0facc;
+    border-radius: 12px;
+    border: 2px solid #aade54;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    user-select: none;
+    box-shadow: 2px 3px 7px #9fbc1f88;
+  }
+  .choice-btn:hover {
+    background-color: #cdf37a;
+    border-color: #83b116;
+  }
+  .choice-btn.correct {
+    background-color: #4bbd11ff;
+    border-color: #357b07ff;
+    color: white;
+    box-shadow: 0 0 15px #61d629cc;
+  }
+  .choice-btn.wrong {
+    background-color: #ec5959ff;
+    border-color: #a43232ff;
+    color: white;
+    box-shadow: 0 0 15px #e25f5fcc;
+  }
+  .choice-btn:focus-visible {
+    outline: 2px solid #8adb2b;
+    outline-offset: 2px;
+  }
+
+  #mulaiPembelajaran .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    user-select: none;
+  }
+  #mulaiPembelajaran .nav-buttons button {
+    background: #4bbd11;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    box-shadow: 0 5px 14px #36a205a3;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    min-width: 110px;
+  }
+  #mulaiPembelajaran .nav-buttons button:disabled {
+    background: #a6d284;
+    cursor: default;
+    box-shadow: none;
+  }
+  #mulaiPembelajaran .nav-buttons button:hover:not(:disabled) {
+    background: #61d63f;
+  }
+  #mulaiPembelajaran .feedback {
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    min-height: 24px;
+    user-select: none;
+    text-align: center;
+  }
+  #mulaiPembelajaran .feedback.correct {
+    color: #2d7a0a;
+  }
+  #mulaiPembelajaran .feedback.wrong {
+    color: #b12929;
+  }
+
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    background: #000;
+    margin-top: 10px;
+  }
+  .video-container iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  section.content-section::-webkit-scrollbar {
+    width: 8px;
+  }
+  section.content-section::-webkit-scrollbar-thumb {
+    background-color: #88be2dcc;
+    border-radius: 8px;
+  }
+  section.content-section::-webkit-scrollbar-track {
+    background-color: #f6ffcc;
+  }
+  
+  @media (max-width: 600px) {
+    #app {
+      max-width: 100%;
+      margin: 0;
+      border-radius: 0;
+      min-height: 100vh;
+    }
+    header {
+      border-radius: 0;
+    }
+    section.content-section {
+      border-radius: 0;
+    }
+  }
+
+  @media (min-width: 900px) {
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #app {
+      max-width: 960px;
+      min-height: 520px;
+      margin: 40px auto;
+      border-radius: 20px;
+    }
+    main {
+      padding: 30px 40px 40px;
+    }
+    #mulaiPembelajaran .section-inner {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 425px) {
+    #options {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .option-btn {
+      height: 120px;
+      font-size: 13px;
+    }
+    .option-btn svg {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 8px;
+    }
+  }
+  @media (max-width: 320px) {
+    #options {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .option-btn {
+      height: 110px;
+      font-size: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+  <!-- 147_JAJANG PA'IJ – Awal body -->
+  <div id="app" role="main" aria-label="Media pembelajaran FPB dan KPK">
+    <header>
+      <h1>Media Pembelajaran Interaktif FPB & KPK</h1>
+      <p>Hallo, selamat datang! Silakan pilih menu di bawah ini.</p>
+    </header>
+    <main>
+      <!-- Menu Icon -->
+      <div id="options" role="list" aria-label="Pilihan menu tujuan pembelajaran">
+        <div class="option-btn" data-target="tujuanPembelajaran" title="Tujuan Pembelajaran" tabindex="0" role="listitem button" aria-pressed="false" aria-label="Tujuan Pembelajaran">
+          <!-- ikon daftar -->
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="8" width="36" height="48" rx="4" fill="#e9ffd1"/>
+            <rect x="22" y="18" width="20" height="3" fill="#2e4c04"/>
+            <rect x="22" y="26" width="20" height="3" fill="#2e4c04"/>
+            <rect x="22" y="34" width="20" height="3" fill="#2e4c04"/>
+          </svg>
+          <div class="option-label">Tujuan Pembelajaran</div>
+        </div>
+        <div class="option-btn" data-target="videoPembelajaran" title="Video Pembelajaran" tabindex="0" role="listitem button" aria-pressed="false" aria-label="Video Pembelajaran">
+          <!-- ikon video -->
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="16" width="44" height="32" rx="4" fill="#e9ffd1"/>
+            <polygon points="28,22 42,32 28,42" fill="#1b3b04"/>
+          </svg>
+          <div class="option-label">Video Pembelajaran</div>
+        </div>
+        <div class="option-btn" data-target="mulaiPembelajaran" title="Mulai Belajar Sekarang" tabindex="0" role="listitem button" aria-pressed="false" aria-label="Mulai Belajar Sekarang">
+          <!-- ikon buku -->
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 14c0-3 2.4-5 5.3-5H32v42H15.3C12.4 51 10 49 10 46V14z" fill="#e9ffd1"/>
+            <path d="M54 14c0-3-2.4-5-5.3-5H32v42h16.7c2.9 0 5.3-2 5.3-5V14z" fill="#d5f48f"/>
+            <line x1="32" y1="9" x2="32" y2="51" stroke="#264005" stroke-width="2"/>
+            <rect x="19" y="18" width="10" height="2" fill="#264005"/>
+            <rect x="19" y="24" width="10" height="2" fill="#264005"/>
+            <rect x="35" y="18" width="10" height="2" fill="#264005"/>
+            <rect x="35" y="24" width="10" height="2" fill="#264005"/>
+          </svg>
+          <div class="option-label">Mulai Belajar</div>
+        </div>
+      </div>
+
+      <!-- Tujuan Pembelajaran Content -->
+      <section id="tujuanPembelajaran" class="content-section" role="region" aria-label="Tujuan Pembelajaran">
+        <h2>Tujuan Pembelajaran</h2>
+        <ol>
+          <li>
+            <strong>Pemahaman Konsep (Conceptual Understanding)</strong><br />
+            Siswa dapat menjelaskan dengan kata-kata sendiri pengertian faktor, kelipatan, FPB, dan KPK, serta hubungan antara faktor, kelipatan, dan bilangan prima.<br />
+            Siswa mampu mengidentifikasi perbedaan mendasar antara situasi yang memerlukan FPB dan situasi yang memerlukan KPK dalam konteks masalah nyata.
+          </li>
+          <li>
+            <strong>Keterampilan Prosedural (Procedural Fluency)</strong><br />
+            Siswa dapat menentukan FPB dan KPK dari dua atau tiga bilangan menggunakan beberapa metode: (1) listing, (2) faktorisasi prima, dan (3) tabel pembagian.<br />
+            Siswa mampu memilih metode yang paling efisien untuk menemukan FPB/KPK sesuai karakteristik soal.
+          </li>
+          <li>
+            <strong>Penalaran Matematis (Reasoning)</strong><br />
+            Siswa mampu memberikan penjelasan mengapa FPB atau KPK yang dipilih sudah benar, serta melakukan verifikasi hasil dengan mengecek kembali faktor/kelipatan yang ditemukan.<br />
+            Siswa dapat membandingkan hasil dari berbagai metode dan menunjukkan bahwa hasilnya konsisten.
+          </li>
+          <li>
+            <strong>Pemecahan Masalah (Problem Solving / Numerasi)</strong><br />
+            Siswa dapat menerapkan konsep FPB dan KPK untuk menyelesaikan berbagai soal kontekstual seperti: jadwal kegiatan, pengulangan peristiwa, pembagian benda secara adil.
+          </li>
+        </ol>
+        <button class="back-btn" aria-label="Kembali ke menu utama">Kembali</button>
+      </section>
+
+      <!-- Video Pembelajaran Content -->
+      <section id="videoPembelajaran" class="content-section" role="region" aria-label="Video Pembelajaran">
+        <h2>Video Pembelajaran</h2>
+        <div class="video-container" aria-label="Video pembelajaran">
+          <iframe src="https://www.youtube.com/embed/QCdDN1T1vdQ" title="Video Pembelajaran FPB dan KPK" allowfullscreen></iframe>
+        </div>
+        <button class="back-btn" aria-label="Kembali ke menu utama">Kembali</button>
+      </section>
+
+      <!-- Mulai Pembelajaran Interaktif -->
+      <section id="mulaiPembelajaran" class="content-section" role="region" aria-label="Mulai Pembelajaran Interaktif">
+        <h2>Mulai Belajar Sekarang</h2>
+
+        <div class="learning-steps">
+          <span id="step-materi" class="active">Langkah 1: Materi</span>
+          <span id="step-latihan">Langkah 2: Latihan</span>
+        </div>
+
+        <div class="section-inner">
+          <!-- SLIDE MATERI -->
+          <div id="slide-materi" class="learning-slide active">
+            <div class="materi-hero">
+              <div class="materi-hero-icon">📚</div>
+              <div class="materi-hero-text">
+                Pelajari dulu konsep faktor, kelipatan, FPB, dan KPK sebelum mengerjakan latihan.
+              </div>
+            </div>
+
+            <h3>Materi Singkat</h3>
+            <ul class="concept-list">
+              <li>
+                <div class="concept-icon">➗</div>
+                <div class="concept-text">
+                  <strong>Faktor:</strong> bilangan yang dapat membagi habis suatu bilangan.  
+                  Contoh: faktor dari 12 adalah 1, 2, 3, 4, 6, dan 12.
+                </div>
+              </li>
+              <li>
+                <div class="concept-icon">✖️</div>
+                <div class="concept-text">
+                  <strong>Kelipatan:</strong> hasil perkalian suatu bilangan dengan bilangan asli.  
+                  Contoh: kelipatan 4 adalah 4, 8, 12, 16, dan seterusnya.
+                </div>
+              </li>
+              <li>
+                <div class="concept-icon">🤝</div>
+                <div class="concept-text">
+                  <strong>FPB:</strong> Faktor Persekutuan Terbesar dari beberapa bilangan.  
+                  Contoh: faktor persekutuan dari 12 dan 18 adalah 1, 2, 3, 6 sehingga FPB-nya 6.
+                </div>
+              </li>
+              <li>
+                <div class="concept-icon">🔁</div>
+                <div class="concept-text">
+                  <strong>KPK:</strong> Kelipatan Persekutuan Terkecil dari beberapa bilangan.  
+                  Contoh: kelipatan persekutuan terkecil dari 3 dan 4 adalah 12.
+                </div>
+              </li>
+            </ul>
+
+            <h3 class="example-title">Contoh Soal (Bukan Latihan)</h3>
+
+            <div class="example-card">
+              <div class="example-card-header">
+                <div class="example-icon">📏</div>
+                <span>Contoh 1 – FPB</span>
+              </div>
+              <p><strong>Soal:</strong> Seorang pedagang memiliki 18 jeruk dan 24 apel. Ia ingin menyusun paket buah dengan jumlah jeruk dan apel yang sama di setiap paket, tanpa sisa. Berapa banyak buah jeruk dan apel dalam tiap paket?</p>
+              <p><strong>Penyelesaian:</strong></p>
+              <p>Faktor 18 = 1, 2, 3, 6, 9, 18</p>
+              <p>Faktor 24 = 1, 2, 3, 4, 6, 8, 12, 24</p>
+              <p>Faktor persekutuan: 1, 2, 3, 6 → FPB = 6.</p>
+              <p><em>Jadi setiap paket berisi 6 jeruk dan 6 apel.</em></p>
+            </div>
+
+            <div class="example-card">
+              <div class="example-card-header">
+                <div class="example-icon">⏰</div>
+                <span>Contoh 2 – KPK</span>
+              </div>
+              <p><strong>Soal:</strong> Lampu di ruang tamu berkedip setiap 4 detik, sedangkan lampu di teras berkedip setiap 6 detik. Setelah keduanya menyala bersamaan, setelah berapa detik kedua lampu akan berkedip bersamaan lagi?</p>
+              <p><strong>Penyelesaian:</strong></p>
+              <p>Kelipatan 4 = 4, 8, 12, 16, 20, 24, ...</p>
+              <p>Kelipatan 6 = 6, 12, 18, 24, ...</p>
+              <p>Kelipatan persekutuan terkecil = 12.</p>
+              <p><em>Jadi kedua lampu akan berkedip bersamaan lagi setelah 12 detik.</em></p>
+            </div>
+
+            <button id="toExerciseBtn" class="slide-primary-btn">
+              Lanjut ke Latihan →
+            </button>
+          </div>
+
+          <!-- SLIDE LATIHAN -->
+          <div id="slide-latihan" class="learning-slide">
+            <h3>Latihan Soal Pilihan Ganda</h3>
+
+            <div id="quiz-container"></div>
+
+            <div class="nav-buttons">
+              <button id="prevBtn" disabled aria-label="Soal Sebelumnya">← Sebelumnya</button>
+              <button id="nextBtn" aria-label="Soal Berikutnya">Berikutnya →</button>
+            </div>
+
+            <div id="quiz-feedback" class="feedback" aria-live="polite"></div>
+
+            <button id="backToMateriBtn" class="slide-secondary-btn">
+              ← Kembali ke Materi
+            </button>
+          </div>
+        </div>
+
+        <button class="back-btn" aria-label="Kembali ke menu utama">Kembali</button>
+      </section>
+    </main>
+  </div>
+
+<script>
+  // 147_JAJANG PA'IJ – Script interaktif
+  const optionButtons = document.querySelectorAll(".option-btn");
+  const sections = document.querySelectorAll("section.content-section");
+  const optionsContainer = document.getElementById("options");
+
+  optionButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      openSection(btn.dataset.target);
+    });
+    btn.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        openSection(btn.dataset.target);
+      }
+    });
+  });
+
+  sections.forEach(section => {
+    const backBtn = section.querySelector(".back-btn");
+    backBtn.addEventListener("click", () => {
+      closeAllSections();
+      resetQuiz();
+    });
+  });
+
+  function openSection(id) {
+    optionsContainer.style.display = "none";
+    sections.forEach(sec => {
+      if(sec.id === id){
+        sec.classList.add("active");
+      } else {
+        sec.classList.remove("active");
+      }
+    });
+  }
+  function closeAllSections(){
+    sections.forEach(sec => sec.classList.remove("active"));
+    optionsContainer.style.display = "grid";
+  }
+
+  const slideMateri = document.getElementById("slide-materi");
+  const slideLatihan = document.getElementById("slide-latihan");
+  const toExerciseBtn = document.getElementById("toExerciseBtn");
+  const backToMateriBtn = document.getElementById("backToMateriBtn");
+  const stepMateri = document.getElementById("step-materi");
+  const stepLatihan = document.getElementById("step-latihan");
+
+  function showSlide(type) {
+    if (type === "materi") {
+      slideMateri.classList.add("active");
+      slideLatihan.classList.remove("active");
+      stepMateri.classList.add("active");
+      stepLatihan.classList.remove("active");
+    } else {
+      slideMateri.classList.remove("active");
+      slideLatihan.classList.add("active");
+      stepMateri.classList.remove("active");
+      stepLatihan.classList.add("active");
+    }
+  }
+
+  toExerciseBtn.addEventListener("click", () => {
+    showSlide("latihan");
+  });
+  backToMateriBtn.addEventListener("click", () => {
+    showSlide("materi");
+  });
+
+  const quizData = [
+    {
+      question: "📘 Manakah daftar yang berisi semua faktor dari 12?",
+      choices: ["1, 2, 3, 4, 6, 12", "1, 3, 6, 9", "1, 2, 4, 8", "2, 4, 6, 12"],
+      correct: 0,
+      explanation: "Faktor 12 adalah bilangan yang dapat membagi 12 tanpa sisa: 1, 2, 3, 4, 6, dan 12."
+    },
+    {
+      question: "📘 Manakah yang merupakan empat kelipatan pertama dari 4?",
+      choices: ["4, 8, 12, 16", "1, 2, 3, 4", "2, 4, 6, 8", "3, 6, 9, 12"],
+      correct: 0,
+      explanation: "Kelipatan 4 diperoleh dari 4×1, 4×2, 4×3, 4×4 sehingga 4, 8, 12, 16."
+    },
+    {
+      question: "📦 (Kontekstual) Sebuah pabrik mempunyai 30 botol kecil dan 42 botol besar. Semua botol akan dimasukkan ke dalam beberapa dus dengan jumlah botol yang sama dan tidak ada sisa. Berapa banyak botol di setiap dus?",
+      choices: ["6 botol", "12 botol", "3 botol", "5 botol"],
+      correct: 0,
+      explanation: "FPB(30, 42) = 6 sehingga tiap dus berisi 6 botol."
+    },
+    {
+      question: "🚌 (Kontekstual) Bus A tiba di terminal setiap 12 menit, bus B setiap 18 menit. Jika mereka berangkat bersama pukul 06.00, pukul berapa mereka akan tiba bersama lagi di terminal?",
+      choices: ["06.36", "06.24", "06.48", "07.00"],
+      correct: 0,
+      explanation: "KPK(12, 18) = 36, jadi 36 menit setelah 06.00 yaitu pukul 06.36."
+    },
+    {
+      question: "🎪 (Kontekstual) Sebuah pentas seni diadakan setiap 8 hari sekali, sedangkan lomba olahraga setiap 20 hari sekali. Jika hari ini kedua acara berlangsung bersamaan, berapa hari lagi kedua acara akan berlangsung bersamaan lagi?",
+      choices: ["40 hari", "24 hari", "28 hari", "60 hari"],
+      correct: 3,
+      explanation: "KPK(8, 20) = 40, jadi kedua acara bersamaan lagi setelah 40 hari."
+    }
+  ];
+
+  let currentIndex = 0;
+  let userAnswers = new Array(quizData.length).fill(null);
+
+  const quizContainer = document.getElementById('quiz-container');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const feedbackDiv = document.getElementById('quiz-feedback');
+
+  function loadQuestion(index) {
+    feedbackDiv.textContent = "";
+    const data = quizData[index];
+    let choicesHTML = "";
+    data.choices.forEach((choice, i) => {
+      const isChecked = userAnswers[index] === i ? 'checked' : '';
+      choicesHTML += `
+        <label class="choice-btn" tabindex="0" role="radio" aria-checked="${isChecked ? 'true' : 'false'}" data-choice-index="${i}">
+          <input type="radio" name="choice" value="${i}" style="display:none;" ${isChecked} />
+          ${choice}
+        </label>
+      `;
+    });
+    quizContainer.innerHTML = `
+      <div class="question">
+        <h4 id="question${index+1}">${data.question}</h4>
+        <div class="choices" role="radiogroup" aria-labelledby="question${index+1}">
+          ${choicesHTML}
+        </div>
+      </div>
+    `;
+
+    const choicesEls = quizContainer.querySelectorAll('.choice-btn');
+    choicesEls.forEach(choiceEl => {
+      choiceEl.addEventListener('click', () => {
+        selectAnswer(index, Number(choiceEl.dataset.choiceIndex));
+      });
+      choiceEl.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectAnswer(index, Number(choiceEl.dataset.choiceIndex));
+        }
+      });
+    });
+
+    prevBtn.disabled = index === 0;
+    nextBtn.textContent = index === quizData.length - 1 ? "Selesai ✔" : "Berikutnya →";
+  }
+
+  function selectAnswer(qIndex, choiceIndex) {
+    userAnswers[qIndex] = choiceIndex;
+    const correctIndex = quizData[qIndex].correct;
+    let feedbackText;
+    if(choiceIndex === correctIndex) {
+      feedbackText = "Jawaban kamu benar! 🎉 " + quizData[qIndex].explanation;
+      feedbackDiv.className = "feedback correct";
+    } else {
+      feedbackText = "Jawabanmu belum tepat. 😞 " + quizData[qIndex].explanation;
+      feedbackDiv.className = "feedback wrong";
+    }
+    feedbackDiv.innerText = feedbackText;
+
+    quizContainer.querySelectorAll('.choice-btn').forEach((el, i) => {
+      el.setAttribute('aria-checked', i === choiceIndex ? 'true' : 'false');
+      el.classList.remove('correct', 'wrong');
+      if(i === choiceIndex) {
+        if(choiceIndex === correctIndex) el.classList.add('correct');
+        else el.classList.add('wrong');
+      }
+    });
+
+    quizContainer.querySelectorAll('input[type=radio]').forEach(input => {
+      input.checked = Number(input.value) === choiceIndex;
+    });
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if(currentIndex > 0) {
+      currentIndex--;
+      feedbackDiv.textContent = "";
+      loadQuestion(currentIndex);
+    }
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if(userAnswers[currentIndex] === null) {
+      alert("Pilih jawaban dulu sebelum lanjut ya!");
+      return;
+    }
+    if(currentIndex < quizData.length - 1) {
+      currentIndex++;
+      feedbackDiv.textContent = "";
+      loadQuestion(currentIndex);
+    } else {
+      showResult();
+    }
+  });
+
+  function showResult() {
+    let score = 0;
+    for(let i=0; i < quizData.length; i++) {
+      if(userAnswers[i] === quizData[i].correct) score++;
+    }
+    quizContainer.innerHTML = `
+      <h3>Hasil Kamu</h3>
+      <p>Kamu menjawab benar <strong>${score} dari ${quizData.length} soal</strong>.</p>
+      <button id="restartQuizBtn">Mulai Ulang Quiz</button>
+    `;
+    feedbackDiv.textContent = "";
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+
+    document.getElementById('restartQuizBtn').addEventListener('click', () => {
+      resetQuiz();
+      loadQuestion(0);
+      prevBtn.style.display = 'inline-block';
+      nextBtn.style.display = 'inline-block';
+    });
+  }
+  
+  function resetQuiz() {
+    currentIndex = 0;
+    userAnswers = new Array(quizData.length).fill(null);
+    feedbackDiv.textContent = "";
+    prevBtn.disabled = true;
+    prevBtn.style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    showSlide("materi");
+  }
+
+  document.querySelector('.option-btn[data-target="mulaiPembelajaran"]').addEventListener('click', () => {
+    resetQuiz();
+    loadQuestion(0);
+  });
+</script>
+</body>
+</html>
